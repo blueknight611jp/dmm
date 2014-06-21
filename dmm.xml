@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?><scraper framework="1.1" date="2014-06-21" name="dmm" content="movies" language="en">
+	<NfoUrl dest="3">
+		<RegExp input="$$1" output="\1" dest="3">
+			<expression encode="1" />
+		</RegExp>
+	</NfoUrl>
+    
+    <!--
+    http://www.dmm.com/search/=/searchstr=%E3%83%96%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%89%E3%83%9E%E3%83%B3/n1=FgRCTw9VBA4GF1RWR1cK/n2=Aw1fVhQKX0JIF25cRVI_/
+    -->
+	<CreateSearchUrl clearbuffers="no"  dest="3">
+		<RegExp input="$$1" output="&lt;url&gt;http://www.dmm.com/search/=/searchstr=\1/n1=FgRCTw9VBA4GF1RWR1cK/n2=Aw1fVhQKX0JIF25cRVI_/&lt;/url&gt;" dest="3">
+			<expression />
+		</RegExp>
+	</CreateSearchUrl>
+    
+    
+	<GetSearchResults dest="8">
+		<RegExp input="$$10" output="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;results&gt;\1&lt;/results&gt;" dest="8">
+			<RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;http://www.dmm.com/\1&lt;/url&gt;&lt;/entity&gt;" dest="10">
+				<expression repeat="yes" noclean="1">&lt;a href="http://www.dmm.com/(rental/ppr/-/detail/=/cid=.*?)/"&gt;.*?&lt;span class="txt"&gt;(.*?)&lt;/span&gt;</expression>
+			</RegExp>
+			<expression noclean="1" />
+		</RegExp>
+	</GetSearchResults>
+    
+	<GetDetails dest="4">
+		<RegExp input="$$8" output="&lt;details&gt;\1&lt;/details&gt;" dest="4">
+			<RegExp input="$$1" output="&lt;title&gt;\1&lt;/title&gt;" dest="8">
+				<expression>&lt;h1.*?&gt;(.*?)&lt;/h1&gt;</expression>
+			</RegExp>
+			
+            <!--td align="right" valign="top" class="nw">貸出開始日：</td>
+            <td>2013/10/02</td-->
+            
+            <RegExp input="$$1" output="&lt;year&gt;\1&lt;/year&gt;" dest="8+">
+				<expression>日：&lt;/td&gt;\s*&lt;td.*?([0-9]{4})/.*?&lt;/td&gt;</expression>
+			</RegExp>
+            
+            
+            
+            <!--div class="center" id="sample-video">
+             <a href="http://pics.dmm.com/mono/movie/n_6161000425530r/n_6161000425530rpl.jpg" target="_package" name="package-image" id="n_6161000425530r"><img src="http://pics.dmm.com/mono/movie/n_6161000425530r/n_6161000425530rps.jpg" id="package-src-n_6161000425530r" alt="ファインド・アウト" class="tdmm"></a><br>
+             <div class="tx10 pd-3"><a href="http://pics.dmm.com/mono/movie/n_6161000425530r/n_6161000425530rpl.jpg" id="n_6161000425530r" name="package-image" target="_blank">イメージを拡大</a></div>
+            </div-->
+                    
+			<RegExp input="$$1" output="&lt;thumb spoof=&quot;http://www.dmm.com&quot;&gt;\1ps.jpg&lt;/thumb&gt;&lt;fanart&gt;&lt;thumb spoof=&quot;http://www.dmm.com&quot;&gt;\1pl.jpg&lt;/thumb&gt;&lt;/fanart&gt;" dest="8+">
+				<expression>src="(http://pics.dmm.com/mono/movie/[^/]*/.*?)ps.jpg"</expression>
+			</RegExp>
+            
+            <!--tr>
+             <td align="right" valign="top" class="nw">メーカー：</td>
+             <td><a href="/rental/ppr/-/list/=/article=maker/id=60016/">ワーナー・ホーム・ビデオ</a></td>
+            </tr-->
+            
+			<RegExp input="$$1" output="&lt;studio&gt;\1&lt;/studio&gt;" dest="8+">
+				<expression>&gt;&lt;a href="/rental/ppr/-/list/=/article=maker/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+			</RegExp>
+            
+            
+            <!--tr>
+             <td align="right" valign="top" class="nw">出演者：</td>
+             <td><a href="/rental/ppr/-/list/=/article=actor/id=209189/">アマンダ・サイフリッド</a>&nbsp;<a href="/rental/ppr/-/list/=/article=actor/id=178589/">ジェニファー・カーペンター</a></td>
+            </tr-->
+            
+            <RegExp input="$$10" output="&lt;actor&gt;&lt;name&gt;\1&lt;/name&gt;&lt;/actor&gt;" dest="8+">
+				<RegExp input="$$1" output="\1" dest="10">
+					<expression noclean="1">&lt;td align="right" valign="top" class="nw"&gt;出演者：&lt;/td&gt;(.*?)&lt;/td&gt;</expression>
+				</RegExp>
+				<expression repeat="yes">&lt;a href="/rental/ppr/-/list/=/article=actor/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+			</RegExp>
+            
+            <!--
+             <td align="right" valign="top" class="nw">監督：</td>
+             <td><a href="/rental/ppr/-/list/=/article=director/id=105859/">エイトール・ダーリア</a></td>
+             -->
+			<RegExp input="$$1" output="&lt;director&gt;\1&lt;/director&gt;" dest="8+">
+				<expression>&lt;a href="/rental/ppr/-/list/=/article=director/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+			</RegExp>
+            
+            <!--
+             
+             <div class="clear mg-b20 lh4">
+             <p class="mg-b20">妹が失踪し、何者かに拉致されたと訴えるジル。彼女には1年前、自らが拉致監禁されたと訴えた過去があり…。『レ・ミゼラブル』のアマンダ・セイフライドが迫真の演技で挑む衝撃のサスペンス・アクション。</p>
+            <div id="rltditem">
+             -->
+			<RegExp input="$$1" output="&lt;plot&gt;\1&lt;/plot&gt;" dest="8+">
+				<expression>&lt;div class="clear mg-b20 lh4"&gt;(.*?)&lt;div id="rltditem"&gt;</expression>
+			</RegExp>
+            
+            <!--tr>
+             <td align="right" valign="top" class="nw">ジャンル：</td>
+             <td><a href="/rental/ppr/-/list/=/article=keyword/id=71002/">アクション</a>&nbsp;<a href="/rental/ppr/-/list/=/article=keyword/id=71005/">サスペンス</a></td>
+            </tr-->
+            
+			<RegExp input="$$3" output="&lt;genre&gt;\1&lt;/genre&gt;" dest="8+">
+				<RegExp input="$$1" output="\1" dest="3">
+					<expression noclean="1">&lt;td align="right" valign="top" class="nw"&gt;ジャンル：&lt;/td&gt;\s*&lt;td&gt;(.*?)&lt;/td&gt;</expression>
+				</RegExp>
+				<expression repeat="yes">&lt;a href="/rental/ppr/-/list/=/article=keyword/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+			</RegExp>
+			<RegExp input="$$1" output="&lt;set&gt;\1&lt;/set&gt;" dest="8+">
+				<expression>&lt;td align="right" valign="top" class="nw"&gt;シリーズ：&lt;/td&gt;\s*&lt;td&gt;&lt;a href="/rental/ppr/-/list/=/article=series/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;&lt;/td&gt;</expression>
+			</RegExp>
+			<expression noclean="1" />
+		</RegExp>
+	</GetDetails>
+</scraper>
