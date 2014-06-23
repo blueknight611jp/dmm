@@ -9,9 +9,11 @@
     http://www.dmm.com/search/=/searchstr=%E3%83%96%E3%83%A9%E3%82%A4%E3%83%B3%E3%83%89%E3%83%9E%E3%83%B3/n1=FgRCTw9VBA4GF1RWR1cK/n2=Aw1fVhQKX0JIF25cRVI_/
     -->
 	<CreateSearchUrl clearbuffers="no"  dest="3">
-		<RegExp input="$$1" output="&lt;url&gt;http://www.dmm.com/search/=/searchstr=\1/n1=FgRCTw9VBA4GF1RWR1cK/n2=Aw1fVhQKX0JIF25cRVI_/&lt;/url&gt;" dest="3">
+        <RegExp input="$$1" output="&lt;url&gt;http://www.dmm.com/search/=/searchstr=\1/n1=FgRCTw9VBA4GCF5WXA__/n2=Aw1fVhQKX19XC15nV0AC/&lt;/url&gt;" dest="3">
+            
 			<expression />
 		</RegExp>
+        
 	</CreateSearchUrl>
     
     <!--
@@ -27,7 +29,7 @@
 		<RegExp input="$$10" output="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;results&gt;\1&lt;/results&gt;" dest="8">
 			<!-- RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;http://www.dmm.com/\1&lt;/url&gt;&lt;/entity&gt;" dest="10" -->
             <RegExp input="$$1" output="&lt;entity&gt;&lt;title&gt;\2&lt;/title&gt;&lt;url&gt;\1&lt;/url&gt;&lt;/entity&gt;" dest="10">
-                <expression repeat="yes" noclean="1,2">&lt;a href="(http://www.dmm.com/rental/ppr/-/detail/=/cid=.*?)/"&gt;.*?&lt;span class="txt"&gt;(.*?)&lt;/span&gt;</expression>
+                <expression repeat="yes" noclean="1,2">&lt;a href="(http://www.dmm.com/mono/dvd/-/detail/=/cid=.*?)/"&gt;.*?&lt;span class="txt"&gt;(.*?)&lt;/span&gt;</expression>
 			</RegExp>
 			<expression noclean="1"/>
 		</RegExp>
@@ -37,7 +39,7 @@
 		<RegExp input="$$8" output="&lt;details&gt;\1&lt;/details&gt;" dest="4">
  
 			<RegExp input="$$1" output="&lt;title&gt;\1&lt;/title&gt;" dest="8">
-                <expression noclean="1">&lt;h1 class=.*?&gt;&lt;span id=.*?&gt;(.*?)&lt;/span&gt;</expression>
+                <expression noclean="1">&lt;h1 .*?&gt;(.*?)&lt;/</expression>
 				<!--expression>&lt;h1ss=.*?&gt;&lt;span id=.*?&gt;(.*?)&lt;/span&gt;&lt;h1&gt;</expression-->
 			</RegExp>
 			
@@ -65,7 +67,7 @@
             </tr-->
             
 			<RegExp input="$$1" output="&lt;studio&gt;\1&lt;/studio&gt;" dest="8+">
-				<expression noclean="1">&gt;&lt;a href="/rental/ppr/-/list/=/article=maker/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+				<expression noclean="1">&gt;&lt;a href="/.*?/.*?/-/list/=/article=maker/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
 			</RegExp>
             
             
@@ -78,7 +80,7 @@
 				<RegExp input="$$1" output="\1" dest="10">
 					<expression noclean="1">&lt;td align="right" valign="top" class="nw"&gt;出演者：&lt;/td&gt;(.*?)&lt;/td&gt;</expression>
 				</RegExp>
-				<expression repeat="yes" noclean="1">&lt;a href="/rental/ppr/-/list/=/article=actor/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+				<expression repeat="yes" noclean="1">&lt;a href="/mono/dvd/-/list/=/article=actor/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
 			</RegExp>
             
             <!--
@@ -86,7 +88,7 @@
              <td><a href="/rental/ppr/-/list/=/article=director/id=105859/">エイトール・ダーリア</a></td>
              -->
 			<RegExp input="$$1" output="&lt;director&gt;\1&lt;/director&gt;" dest="8+">
-				<expression noclean="1">&lt;a href="/rental/ppr/-/list/=/article=director/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
+				<expression noclean="1">&lt;a href="/mono/dvd/-/list/=/article=director/id=[0-9]+/"&gt;(.*?)&lt;/a&gt;</expression>
 			</RegExp>
             
             <!--
@@ -104,7 +106,7 @@
              
              -->
 			<RegExp input="$$1" output="&lt;plot&gt;\1&lt;/plot&gt;" dest="8+">
-				<expression  trim="yes">&lt;div class="clear mg-b20 lh4"&gt;(.*?)&lt;(div id="rltditem"|/div)&gt;</expression>
+				<expression  trim="yes">&lt;div class=".*?mg-b20 lh4"&gt;(.*?)&lt;(div id="rltditem"|/div)&gt;</expression>
 			</RegExp>
             
             <!--tr>
